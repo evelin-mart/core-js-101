@@ -28,13 +28,15 @@
  *                                                    //  Ask her again.';
  */
 function willYouMarryMe(isPositiveAnswer) {
-  return new Promise((res, rej) =>
-    isPositiveAnswer === undefined
-      ? rej(new Error('Wrong parameter is passed! Ask her again.'))
-      : isPositiveAnswer
-      ? res('Hooray!!! She said "Yes"!')
-      : res('Oh no, she said "No".')
-  );
+  return new Promise((res, rej) => {
+    if (isPositiveAnswer === undefined) {
+      rej(new Error('Wrong parameter is passed! Ask her again.'));
+    } else if (isPositiveAnswer) {
+      res('Hooray!!! She said "Yes"!');
+    } else {
+      res('Oh no, she said "No".');
+    }
+  });
 }
 
 /**
@@ -98,9 +100,9 @@ function getFastestPromise(array) {
  */
 async function chainPromises(array, action) {
   const answer = [];
-  await array.forEach((p) =>
-    p.then((res) => answer.push(res)).catch((err) => answer.push(null))
-  );
+  await array.forEach((p) => {
+    p.then((res) => answer.push(res)).catch(() => answer.push(null));
+  });
   return answer.reduce((acc, el) => (el ? action(acc, el) : acc));
 }
 
