@@ -179,8 +179,10 @@ function isInsideCircle(circle, point) {
 function findFirstSingleChar(str) {
   const arr = str.split('');
   const set = new Set(arr);
-  for (const c of set.values()) {
-    if (arr.filter((i) => i === c).length === 1) return c;
+  const res = Array.from(set.values());
+  for (let i = 0; i < set.size; i += 1) {
+    const char = res[i];
+    if (arr.filter((e) => e === char).length === 1) return char;
   }
   return null;
 }
@@ -207,8 +209,9 @@ function findFirstSingleChar(str) {
  *   5, 3, true, true   => '[3, 5]'
  *
  */
-function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
-  throw new Error('Not implemented');
+function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
+  const arr = [a, b].sort((x, y) => x - y);
+  return `${isStartIncluded ? '[' : '('}${arr[0]}, ${arr[1]}${isEndIncluded ? ']' : ')'}`;
 }
 
 /**
@@ -396,12 +399,11 @@ function toNaryString(num, n) {
  *   ['/web/favicon.ico', '/web-scripts/dump', '/verbalizer/logs'] => '/'
  */
 function getCommonDirectoryPath(pathes) {
-  let regexp = '';
   let res = '';
   const index = pathes[0].lastIndexOf('/');
   const arr = pathes[0].slice(1, index).split('/');
   for (let i = 0; i < arr.length; i += 1) {
-    regexp = new RegExp(`^${res}/${arr[i]}/`);
+    const regexp = new RegExp(`^${res}/${arr[i]}/`);
     if (pathes.every((el) => el.match(regexp))) {
       res = `${res}/${arr[i]}`;
     } else {
